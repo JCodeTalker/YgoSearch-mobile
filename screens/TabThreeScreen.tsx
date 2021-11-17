@@ -1,8 +1,9 @@
-import { View, Text, Image, ScrollView } from "react-native";
+import { Text, Image, ScrollView, StyleSheet } from "react-native";
 import * as React from "react"
 import { collection, getDocs, query } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
 import { cardType } from "../types";
+import { translate } from "../i18n/src/locales";
 
 export default function TabThreeScreen() {
   const [cardList, setCardList] = React.useState<cardType[]>()
@@ -22,23 +23,26 @@ export default function TabThreeScreen() {
           lista.push(doc.data() as cardType)
         }
       })
-      console.log(lista)
       setCardList(lista)
     }
     getDataFromDB()
   }, [])
 
-  React.useEffect(() => {
-    console.log(cardList)
-  }, [cardList])
-
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text>
-        Your saved list:
+        {translate('listPresent')}
       </Text>
       {cardList && cardList.map((card, index) => <Image key={index} source={{ uri: card.card_images[0].image_url_small }} style={{ width: 200, height: 300, margin: 5 }} />)}
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+})

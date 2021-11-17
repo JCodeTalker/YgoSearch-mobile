@@ -12,6 +12,7 @@ import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import { translate } from '../i18n/src/locales';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -89,7 +90,7 @@ function BottomTabNavigator() {
         name="TabTwo"
         component={TabTwoScreen}
         options={{
-          title: 'Search card info.',
+          title: translate('title2'),
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
@@ -97,7 +98,7 @@ function BottomTabNavigator() {
         name="TabThree"
         component={TabThreeScreen}
         options={{
-          title: 'Tab Three',
+          title: "WishList",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
