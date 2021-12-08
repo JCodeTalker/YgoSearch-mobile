@@ -4,14 +4,16 @@ import { collection, getDocs, query } from "@firebase/firestore";
 import { db } from "../firebase/firebase";
 import { cardType } from "../types";
 import { translate } from "../i18n/src/locales";
+import { AuthContext } from "../contexts/auth";
 
-export default function TabThreeScreen() {
+export default function WishList() {
   const [cardList, setCardList] = React.useState<cardType[]>()
+  const { userData } = React.useContext(AuthContext)
 
 
   React.useEffect(() => {
     async function getDataFromDB() {
-      const q = query(collection(db, "users1"))
+      const q = query(collection(db, "usuarios", userData.email, "Card WishList"))
 
       let querySnapShot = await getDocs(q)
 

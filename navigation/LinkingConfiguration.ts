@@ -15,7 +15,7 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          CardSearch: {
             screens: {
               TabOneScreen: 'one',
             },

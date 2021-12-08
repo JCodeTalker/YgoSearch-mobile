@@ -11,22 +11,30 @@ import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
+import { AuthContext, AuthContextProvider } from '../contexts/auth';
 import useColorScheme from '../hooks/useColorScheme';
-import { translate } from '../i18n/src/locales';
-import ModalScreen from '../screens/ModalScreen';
+import Home from '../screens/Home';
+import ModalScreen from '../screens/LoginModal';
+import ModalSignUp from '../screens/ModalSignUp';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabThreeScreen from '../screens/TabThreeScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import WishList from '../screens/WishList';
+import WishListElse from '../screens/WishListElse';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import CardSearchScreen from '../screens/CardSearchScreen';
+import { Icon } from 'react-native-elements';
+
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
+      <AuthContextProvider>
+        <RootNavigator />
+      </AuthContextProvider>
     </NavigationContainer>
   );
 }
@@ -37,13 +45,15 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+function RootNavigator() { // handles normal button links within app
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="Root" component={Home} options={{ headerShown: false }} />
+      <Stack.Screen name="Main" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="ModalSignUp" component={ModalSignUp} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -55,21 +65,24 @@ function RootNavigator() {
  */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-function BottomTabNavigator() {
+function BottomTabNavigator() { // handles only the tab links
   const colorScheme = useColorScheme();
+
+  const { userData } = React.useContext(AuthContext)
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
+
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="CardSearch"
+        component={CardSearchScreen}
+        options={({ navigation }: RootTabScreenProps<'CardSearch'>) => ({
+          title: `User: ${userData.email}`,
+          tabBarIcon: ({ color }) => <Icon tvParallaxProperties name='search' type='material' size={30} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
@@ -86,22 +99,26 @@ function BottomTabNavigator() {
           ),
         })}
       />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
-        options={{
-          title: translate('title2'),
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
+
       <BottomTab.Screen
         name="TabThree"
-        component={TabThreeScreen}
+        component={WishList}
         options={{
           title: "WishList",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <Icon tvParallaxProperties name='list' type='material' size={35} />,
         }}
       />
+
+      <BottomTab.Screen
+        name="TabTwo"
+        component={WishList}
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <Icon tvParallaxProperties name='settings' type='material' size={30} />,
+        }}
+      />
+
+
     </BottomTab.Navigator>
   );
 }

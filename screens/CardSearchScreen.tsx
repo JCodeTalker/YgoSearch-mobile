@@ -3,15 +3,17 @@ import * as React from 'react';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, Image, Button } from 'react-native';
 import { Text, View } from '../components/Themed';
+import { AuthContext } from '../contexts/auth';
 import { db } from '../firebase/firebase';
 import { useCardSearch } from '../hooks/useCardSearch';
 import { translate } from '../i18n/src/locales';
-import { cardType } from '../types';
+import { cardType, RootTabScreenProps } from '../types';
 
 
-export default function TabTwoScreen() {
+export default function CardSearchScreen({ navigation }: RootTabScreenProps<"CardSearch">) {
   const [text, setText] = useState(translate("searchBar"))
   const [cardRes, setRes] = useState<cardType>()
+  const { userData } = React.useContext(AuthContext)
 
   async function onSubmitSearch() {
     let cardResult = await useCardSearch({ exact: true, name: text })
@@ -20,7 +22,7 @@ export default function TabTwoScreen() {
 
   async function addToWishList() {
     if (cardRes) {
-      await setDoc(doc(db, "users1", cardRes.name), cardRes as cardType)
+      await setDoc(doc(db, "usuarios", userData.email, "Card WishList", cardRes.name), cardRes as cardType)
     }
   }
 
