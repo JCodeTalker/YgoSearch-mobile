@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, TextInput, Switch, Pressable } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { AuthContext } from '../contexts/auth';
+import { AccountButton as SignButton } from '../fragments/AccountButton';
 import { RootTabScreenProps } from '../types';
 
 
@@ -48,9 +49,8 @@ export default function ModalSignUp({ navigation }: RootTabScreenProps<'SignUp'>
 
       <Text style={styles.forgotPass}>Forgot Password</Text>
 
-      <Pressable onPressOut={signUp} style={{ display: "flex", paddingHorizontal: 100, justifyContent: 'center' }} >
-        <Text style={styles.signInButton} >Sign Up</Text>
-      </Pressable>
+
+      <SignButton buttonListener={signUp} text={" Continue "} />
 
     </View>
   );
@@ -102,16 +102,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   forgotPass: {
-    marginTop: 15, marginHorizontal: 20, color: "red"
-  },
-  signInButton: {
-    fontWeight: 'bold',
-    paddingHorizontal: 40,
-    paddingVertical: 10,
-    backgroundColor: "#ff3300",
-    color: "white",
-    borderRadius: 20,
-    marginTop: 20,
-    // alignSelf: 'center'
+    marginTop: 5, marginHorizontal: 30, color: "red"
   }
 });

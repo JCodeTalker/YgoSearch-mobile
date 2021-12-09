@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, TextInput, Switch, Pressable } from 'react-native';
+import { StyleSheet, TextInput, Switch } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { AuthContext } from '../contexts/auth';
+import { AccountButton as LoginButton } from '../fragments/AccountButton';
 import { RootTabScreenProps } from '../types';
 
 
@@ -9,7 +10,7 @@ export default function ModalLogin({ navigation }: RootTabScreenProps<'Login'>) 
 
   const [email, onChangeEmail] = React.useState("")
   const [password, onChangePassword] = React.useState("")
-  const [isEnabled, setIsEnabled] = React.useState(false)
+  const [isEnabled, setIsEnabled] = React.useState(true)
   const toggleSwitch = () => setIsEnabled(prevState => !prevState)
   const { loginIn } = React.useContext(AuthContext)
   async function login() {
@@ -20,7 +21,7 @@ export default function ModalLogin({ navigation }: RootTabScreenProps<'Login'>) 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
+      <Text style={styles.title}>Login</Text>
       <TextInput placeholder="E-mail Address" style={styles.input} onChangeText={onChangeEmail} ></TextInput>
       <TextInput placeholder="Password" style={styles.input} onChangeText={onChangePassword} secureTextEntry={true} ></TextInput>
       <View style={styles.switchContainer}>
@@ -35,9 +36,8 @@ export default function ModalLogin({ navigation }: RootTabScreenProps<'Login'>) 
         <Text style={styles.forgotPass}>Forgot Password</Text>
       </View>
 
-      <Pressable onPressOut={login} style={{ display: "flex", paddingHorizontal: 100, justifyContent: 'center' }} >
-        <Text style={styles.loginButton} >Login</Text>
-      </Pressable>
+      <LoginButton text={"Get Started"} buttonListener={login} />
+
     </View>
   );
 }
@@ -45,6 +45,7 @@ export default function ModalLogin({ navigation }: RootTabScreenProps<'Login'>) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
@@ -74,14 +75,5 @@ const styles = StyleSheet.create({
   },
   forgotPass: {
     marginTop: 15, marginHorizontal: 52, color: "red"
-  },
-  loginButton: {
-    fontWeight: 'bold',
-    paddingHorizontal: 60,
-    paddingVertical: 10,
-    backgroundColor: "#ff3300",
-    color: "white",
-    borderRadius: 20,
-    marginTop: 20
   }
 });

@@ -2,6 +2,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import * as React from 'react';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, Image, Button } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
 import { AuthContext } from '../contexts/auth';
 import { db } from '../firebase/firebase';
@@ -11,7 +12,8 @@ import { cardType, RootTabScreenProps } from '../types';
 
 
 export default function CardSearchScreen({ navigation }: RootTabScreenProps<"CardSearch">) {
-  const [text, setText] = useState(translate("searchBar"))
+  const [text, setText] = useState("")
+  // const [text, setText] = useState(translate("searchBar"))
   const [cardRes, setRes] = useState<cardType>()
   const { userData } = React.useContext(AuthContext)
 
@@ -29,10 +31,11 @@ export default function CardSearchScreen({ navigation }: RootTabScreenProps<"Car
   return (
     <ScrollView>
       <View>
-        <TextInput style={{ borderStyle: "solid", borderColor: "black", borderWidth: 0.5, margin: 5 }} value={text} onChangeText={text => setText(text)} onSubmitEditing={event => (setText(event.nativeEvent.text), onSubmitSearch())} />
+        {/* <SearchBar placeholder="Search..." onCancel={() => { }} lightTheme round onClear={() => { }} onFocus={() => { }} showLoading onBlur={() => { }} loadingProps={{}} platform="default" value={text} onChangeText={(input) => setText(text)} onSubmitEditing={event => (setText(event.nativeEvent.text), onSubmitSearch())} showCancel={false} clearIcon={undefined} searchIcon={undefined} cancelButtonTitle={undefined} cancelButtonProps={undefined} /> */}
+        <TextInput placeholder="Type here..." style={{ borderStyle: "solid", borderColor: "black", borderWidth: 0.5, margin: 5 }} value={text} onChangeText={text => setText(text)} onSubmitEditing={event => (setText(event.nativeEvent.text), onSubmitSearch())} />
         <Text style={styles.desc} >{cardRes?.desc}</Text>
         <Image source={{ uri: cardRes?.card_images[0].image_url_small }} style={{ width: 200, height: 300, margin: 5, alignSelf: "center" }} />
-        <Button onPress={addToWishList} title={translate("wishButton")} />
+        {cardRes && <Button onPress={addToWishList} title={translate("wishButton")} />}
       </View>
     </ScrollView>
   );
