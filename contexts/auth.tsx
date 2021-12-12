@@ -39,7 +39,7 @@ export function AuthContextProvider(props: ProviderProps) {
       if (userCredential.user.email) {
         const fullName = firstName + " " + lastName
         setUserData({ name: fullName, email })
-        userData.name === fullName && await setDoc(doc(db, "usuarios", email), userData)
+        email && await setDoc(doc(db, "usuarios", email), { name: fullName, email: email })
         // ToastAndroid.show("Successfully signed up!", ToastAndroid.LONG)
         return true
       }
